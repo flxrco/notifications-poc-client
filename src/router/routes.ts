@@ -3,8 +3,10 @@ import { RouteConfig } from 'vue-router'
 const routes: RouteConfig[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Index.vue') }]
+    component: () => import('layouts/PocLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Placeholder.vue') }
+    ]
   }
 ]
 
