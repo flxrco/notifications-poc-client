@@ -13,8 +13,17 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@stomp/rx-stomp": "^0.3.5",
+    "@types/faker": "^4.1.11",
+    "@types/lodash": "^4.14.150",
+    "@types/luxon": "^1.22.0",
     "axios": "^0.18.1",
+    "faker": "^4.1.0",
+    "lodash": "^4.17.15",
+    "luxon": "^1.24.1",
     "quasar": "^1.9.5",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.5",
     "vue-class-component": "^7.2.2",
     "vue-i18n": "^8.0.0",
     "vue-property-decorator": "^8.3.0"
