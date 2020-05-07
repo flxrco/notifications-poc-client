@@ -3,8 +3,12 @@ import { StoreInterface } from '../index'
 import { NotificationState } from './state'
 
 const getters: GetterTree<NotificationState, StoreInterface> = {
-  someAction (/* context */) {
-    // your code
+  unreadCount (state) {
+    return state.notifications.filter(notif => !notif.readAt).length
+  },
+
+  hasNotifications (state, getters) {
+    return getters.unreadCount > 0
   }
 }
 

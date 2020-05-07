@@ -1,7 +1,10 @@
-import { store } from 'quasar/wrappers'
+// import { store } from 'quasar/wrappers'
 import Vuex from 'vuex'
+import Vue from 'vue'
 import notifications from './notifications'
 import { NotificationState } from './notifications/state'
+import { AuthState } from './auth/state'
+import auth from './auth'
 
 // import example from './module-example';
 // import { ExampleStateInterface } from './module-example/state';
@@ -16,20 +19,37 @@ export interface StoreInterface {
   // example: ExampleStateInterface;
   // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
   notification: NotificationState;
+  auth: AuthState;
 }
 
-export default store(function ({ Vue }) {
-  Vue.use(Vuex)
+// export default store(function ({ Vue }) {
+//   Vue.use(Vuex)
 
-  const Store = new Vuex.Store<StoreInterface>({
-    modules: {
-      notifications
-    },
+//   const Store = new Vuex.Store<StoreInterface>({
+//     modules: {
+//       notifications,
+//       auth
+//     },
 
-    // enable strict mode (adds overhead!)
-    // for dev mode only
-    strict: !!process.env.DEV
-  })
+//     // enable strict mode (adds overhead!)
+//     // for dev mode only
+//     strict: !!process.env.DEV
+//   })
 
-  return Store
+//   return Store
+// })
+
+Vue.use(Vuex)
+
+const store = new Vuex.Store<StoreInterface>({
+  modules: {
+    notifications,
+    auth
+  },
+
+  // enable strict mode (adds overhead!)
+  // for dev mode only
+  strict: !!process.env.DEV
 })
+
+export default store
