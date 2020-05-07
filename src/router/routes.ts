@@ -6,7 +6,7 @@ const routes: RouteConfig[] = [
     path: '/',
     component: () => import('layouts/PocLayout.vue'),
     children: [
-      { path: '', name: 'home', component: () => import('pages/Placeholder.vue') }
+      { path: '', name: 'home', component: () => import('pages/Notifications.vue') }
     ],
     beforeEnter: (to, from, next) => next(!store.state.auth.username ? { name: 'login' } : undefined)
   },

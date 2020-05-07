@@ -11,7 +11,7 @@ export class NotificationWSService {
   private _notifications$!: Observable <IMessage>
 
   constructor () {
-    const socket = SockJS(WS_URL || 'http://localhost:8080/notification-ws')
+    const socket = SockJS(WS_URL || 'http://localhost:8080/notifications-websocket')
     const stomp = this.stomp = new RxStomp()
 
     stomp.configure({
