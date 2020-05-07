@@ -13,15 +13,22 @@ const actions: ActionTree<AuthState, StoreInterface> = {
     // your code
   },
 
-  async login (context, payload: LoginPayload) {
+  async login ({ commit }, payload: LoginPayload) {
     const { $axios, username } = payload
-    await $axios.post('/login', { username })
-    context.commit('setLoggedInUser', username)
+    await $axios.post('/auth/login', null, { params: { username } })
+    commit('setLoggedInUser', username)
   },
 
-  async logout (context, $axios: AxiosInstance) {
-    await $axios.post('/logout')
-    context.commit('setLoggedInUser', null)
+  async logout ({ commit }, $axios: AxiosInstance) {
+    await $axios.post('/auth/logout')
+    commit('setLoggedInUser', null)
+  },
+
+  async getSession ({ commit }, $axios: AxiosInstance) {
+    const { data } = await $axios.get('/auth/session')
+    if (data) {
+      commit('setLoggedInUser', data)
+    }
   }
 }
 
