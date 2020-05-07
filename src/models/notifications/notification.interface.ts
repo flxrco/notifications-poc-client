@@ -1,6 +1,8 @@
+import NotificationType from './notification-type.enum'
+
 export default interface Notification {
   createdAt: Date;
   readAt: Date;
-  type: number | string;
+  type: NotificationType;
   id: number;
 }

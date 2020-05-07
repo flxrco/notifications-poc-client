@@ -1,7 +1,7 @@
 <template>
   <div class="fit">
     <div class="row" id="container">
-      <q-form class="col-xs-12 col-sm-10 offset-sm-1 col-md-4 offset-md-4">
+      <q-form class="col-xs-12 col-sm-10 offset-sm-1 col-md-4 offset-md-4" @submit.prevent="onLoginBtnClick">
         <q-card>
           <q-card-section class="bg-primary text-white">
             <div class="text-h6">Log In</div>

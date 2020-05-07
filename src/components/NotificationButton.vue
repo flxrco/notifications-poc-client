@@ -8,6 +8,5 @@ import { Component } from 'vue-property-decorator'
 
 @Component
 export default class NotificationButton extends Vue {
-
 }
 </script>
