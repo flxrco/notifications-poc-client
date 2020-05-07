@@ -1,19 +1,22 @@
 import { RouteConfig } from 'vue-router'
+import store from 'src/store'
 
 const routes: RouteConfig[] = [
   {
     path: '/',
     component: () => import('layouts/PocLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Placeholder.vue') }
-    ]
+      { path: '', name: 'home', component: () => import('pages/Placeholder.vue') }
+    ],
+    beforeEnter: (to, from, next) => next(!store.state.auth.username ? { name: 'login' } : undefined)
   },
   {
     path: '/login',
     component: () => import('layouts/LoginLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Login.vue') }
-    ]
+      { path: '', name: 'login', component: () => import('pages/Login.vue') }
+    ],
+    beforeEnter: (to, from, next) => next(store.state.auth.username ? { name: 'home' } : undefined)
   }
 ]
 

@@ -24,7 +24,7 @@
           </q-card-section>
           <q-separator />
           <q-card-section class="flex row justify-end">
-            <q-btn color="primary">Proceed</q-btn>
+            <q-btn color="primary" @click="onLoginBtnClick" >Proceed</q-btn>
           </q-card-section>
         </q-card>
       </q-form>
@@ -36,17 +36,29 @@
 import Vue from 'vue'
 import faker from 'faker'
 import { Component } from 'vue-property-decorator'
+import { mapActions } from 'vuex'
+import { LoginPayload } from '../store/auth/actions'
 
-@Component
+@Component({
+  methods: {
+    ...mapActions('auth', ['login'])
+  }
+})
 export default class Login extends Vue {
   username = ''
 
-  login () {
-    // TODO login
-  }
+  login!: (payload: LoginPayload) => Promise<void>
 
   onGenerateBtnClick () {
     this.username = faker.internet.userName()
+  }
+
+  async onLoginBtnClick () {
+    await this.login({
+      $axios: this.$axios,
+      username: this.username
+    })
+    await this.$router.push({ name: 'home' })
   }
 }
 </script>
