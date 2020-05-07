@@ -38,7 +38,7 @@ import NotificationType from '../models/notifications/notification-type.enum'
     ...mapState('notification', ['notifications'])
   },
   filters: {
-    minutesFromNow: (date: Date) => DateTime.fromJSDate(date).toFormat('mm'),
+    minutesFromNow: (date: Date) => Math.round(Math.abs(DateTime.fromJSDate(date).diffNow('minutes').minutes)),
     notifAvatar: (type: NotificationType) => {
       switch (type) {
         case NotificationType.DISCUSSION:

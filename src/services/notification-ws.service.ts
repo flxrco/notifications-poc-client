@@ -19,7 +19,9 @@ export class NotificationWSService {
       webSocketFactory: () => socket
     })
 
-    this._notifications$ = this.stomp.watch(STOMP_DEST || '/receive/notifications')
+    this._notifications$ = this.stomp.watch(STOMP_DEST || '/receive/notification')
+
+    this.initReceive()
   }
 
   connect () {
@@ -28,6 +30,11 @@ export class NotificationWSService {
 
   disconnect () {
     this.stomp.deactivate()
+  }
+
+  private initReceive () {
+    this.notifications$
+      .subscribe(data => console.log(data))
   }
 
   get notifications$ (): Observable<IMessage> {
