@@ -1,7 +1,7 @@
 // import { store } from 'quasar/wrappers'
 import Vuex from 'vuex'
 import Vue from 'vue'
-import notifications from './notifications'
+import notification from './notifications'
 import { NotificationState } from './notifications/state'
 import { AuthState } from './auth/state'
 import auth from './auth'
@@ -43,7 +43,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store<StoreInterface>({
   modules: {
-    notifications,
+    notification,
     auth
   },
 

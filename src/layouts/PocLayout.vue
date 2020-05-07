@@ -7,7 +7,9 @@
           Notifications POC
         </q-toolbar-title>
 
-        <q-btn flat dense round icon="notifications" />
+        <q-btn flat dense round icon="notifications">
+          <NotificationMenu />
+        </q-btn>
         <q-btn flat dense round icon="exit_to_app" @click="onLogoutBtn">
           <q-tooltip>
             Log Out
@@ -32,11 +34,13 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { mapActions } from 'vuex'
 import { AxiosInstance } from 'axios'
+import NotificationMenu from 'src/components/NotificationMenu.vue'
 
 @Component({
   methods: {
     ...mapActions('auth', ['logout'])
-  }
+  },
+  components: { NotificationMenu }
 })
 export default class PocLayout extends Vue {
   logout!: ($axios: AxiosInstance) => Promise<void>
