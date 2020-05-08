@@ -22,6 +22,10 @@ const mutation: MutationTree<NotificationState> = {
     }
 
     notif.readAt = new Date()
+  },
+
+  clearNotifications (state) {
+    state.notifications = []
   }
 
 }

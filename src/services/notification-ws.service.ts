@@ -1,7 +1,9 @@
 import SockJS from 'sockjs-client'
 import { RxStomp } from '@stomp/rx-stomp'
 import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { IMessage } from '@stomp/stompjs'
+import Notification from 'src/models/notifications/notification.interface'
 
 const { WS_URL, STOMP_DEST } = process.env
 
@@ -19,9 +21,7 @@ export class NotificationWSService {
       webSocketFactory: () => socket
     })
 
-    this._notifications$ = this.stomp.watch(STOMP_DEST || '/receive/notification')
-
-    this.initReceive()
+    this._notifications$ = this.stomp.watch(STOMP_DEST || '/queue/notifications')
   }
 
   connect () {
@@ -32,13 +32,22 @@ export class NotificationWSService {
     this.stomp.deactivate()
   }
 
-  private initReceive () {
-    this.notifications$
-      .subscribe(data => console.log(data))
-  }
-
-  get notifications$ (): Observable<IMessage> {
+  get notifications$ (): Observable<Notification> {
     return this._notifications$
+      .pipe(
+        map(({ body }) => {
+          const data = JSON.parse(body)
+
+          return {
+            id: data.notificationID,
+            username: data.author,
+            createdAt: new Date(data.createdAt),
+            readAt: data.readAt ? new Date(data.readAt) : null,
+            message: data.message,
+            type: data.type
+          } as Notification
+        })
+      )
   }
 }
 

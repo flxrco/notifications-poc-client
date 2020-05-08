@@ -6,16 +6,18 @@ import Notification from 'src/models/notifications/notification.interface'
 import MarkAsReadPayload from 'src/models/vuex/mark-as-read-payload.interface'
 
 const actions: ActionTree<NotificationState, StoreInterface> = {
-  async fetchNotifications ({ commit }, $axios: AxiosInstance) {
+  async fetchNotifications ({ commit, rootState }, $axios: AxiosInstance) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await $axios.get<any[]>('/notifications')
-    const notifs = data.map(notif => ({
-      ...notif,
-      id: notif.notificationID,
-      username: notif.author,
-      createdAt: new Date(notif.createdAt),
-      readAt: notif.readAt ? new Date(notif.readAt) : null
-    }) as Notification)
+    const notifs = data
+      .map(notif => ({
+        ...notif,
+        id: notif.notificationID,
+        username: notif.author,
+        createdAt: new Date(notif.createdAt),
+        readAt: notif.readAt ? new Date(notif.readAt) : null
+      }) as Notification)
+      .filter(notif => notif.username !== rootState.auth.username)
     commit('addNotifications', notifs)
   },
 

@@ -8,9 +8,7 @@
         </q-toolbar-title>
 
         <!-- contains the notification menu/dropdown -->
-        <q-btn flat dense round icon="notifications">
-          <NotificationMenu />
-        </q-btn>
+        <NotificationButton />
 
         <!-- contains logout -->
         <q-btn flat dense rounde icon="account_circle">
@@ -54,28 +52,35 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import { AxiosInstance } from 'axios'
-import NotificationMenu from 'src/components/NotificationMenu.vue'
+import NotificationButton from '../components/NotificationButton.vue'
 
 @Component({
   methods: {
-    ...mapActions('auth', ['logout'])
+    ...mapActions('auth', ['logout']),
+    ...mapMutations('notification', ['clearNotifications'])
   },
   computed: {
     ...mapState('auth', ['username'])
   },
-  components: { NotificationMenu }
+  components: { NotificationButton }
 })
 export default class PocLayout extends Vue {
   logout!: ($axios: AxiosInstance) => Promise<void>
+  clearNotifications!: () => void
 
   async onLogoutBtn () {
     await this.logout(this.$axios)
     await this.$router.push({ name: 'login' })
+    this.clearNotifications()
     this.$q.notify('You have been logged out.')
   }
 
   username!: string
+
+  beforeDestroy () {
+    this.logout(this.$axios)
+  }
 }
 </script>

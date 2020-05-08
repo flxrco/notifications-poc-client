@@ -24,19 +24,24 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { AxiosInstance } from 'axios'
 import { DateTime } from 'luxon'
 import Notification from '../models/notifications/notification.interface'
 import NotificationType from '../models/notifications/notification-type.enum'
 import MarkAsReadPayload from '../models/vuex/mark-as-read-payload.interface'
+import NotifService from 'src/services/notification-ws.service'
+import { Subscription } from 'rxjs'
+import { filter } from 'rxjs/operators'
 
 @Component({
   methods: {
-    ...mapActions('notification', ['fetchNotifications', 'markAsRead'])
+    ...mapActions('notification', ['fetchNotifications', 'markAsRead']),
+    ...mapMutations('notification', ['addNotifications'])
   },
   computed: {
-    ...mapState('notification', ['notifications'])
+    ...mapState('notification', ['notifications']),
+    ...mapState('auth', ['username'])
   },
   filters: {
     minutesFromNow: (date: Date) => Math.round(Math.abs(DateTime.fromJSDate(date).diffNow('minutes').minutes)),
@@ -57,15 +62,23 @@ import MarkAsReadPayload from '../models/vuex/mark-as-read-payload.interface'
 export default class NotificationMenu extends Vue {
   // from vuex
   notifications!: Notification[]
+  username!: string
   fetchNotifications!: (axios: AxiosInstance) => Promise<void>
   markAsRead!: (pl: MarkAsReadPayload) => Promise<void>
+  addNotifications!: (notifs: Notification[]) => void
 
   // from filters
   minutesFromNow!: (date: Date) => string;
   notifAvatar!: (type: NotificationType) => string;
 
+  // rxjs babyyyyy
+  notifSub!: Subscription;
+
   mounted () {
     this.fetchNotifications(this.$axios)
+    this.notifSub = NotifService.notifications$
+      .pipe(filter(data => data.username !== this.username))
+      .subscribe(data => this.addNotifications([data]))
   }
 
   async onNotificationClick (notification: Notification) {
