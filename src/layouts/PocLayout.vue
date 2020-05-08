@@ -7,14 +7,36 @@
           Notifications POC
         </q-toolbar-title>
 
+        <!-- contains the notification menu/dropdown -->
         <q-btn flat dense round icon="notifications">
           <NotificationMenu />
         </q-btn>
-        <q-btn flat dense round icon="exit_to_app" @click="onLogoutBtn">
-          <q-tooltip>
-            Log Out
-          </q-tooltip>
+
+        <!-- contains logout -->
+        <q-btn flat dense rounde icon="account_circle">
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item>
+                <q-item-section avatar>
+                  <q-icon name="face" color="primary" />
+                </q-item-section>
+                <q-item-section>
+                  {{ username }}
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable v-ripple @click="onLogoutBtn">
+                <q-item-section avatar>
+                  <q-icon name="exit_to_app" color="primary"/>
+                </q-item-section>
+                <q-item-section>
+                  Log Out
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
         </q-btn>
+
       </q-toolbar>
     </q-header>
 
@@ -32,13 +54,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { AxiosInstance } from 'axios'
 import NotificationMenu from 'src/components/NotificationMenu.vue'
 
 @Component({
   methods: {
     ...mapActions('auth', ['logout'])
+  },
+  computed: {
+    ...mapState('auth', ['username'])
   },
   components: { NotificationMenu }
 })
@@ -50,5 +75,7 @@ export default class PocLayout extends Vue {
     await this.$router.push({ name: 'login' })
     this.$q.notify('You have been logged out.')
   }
+
+  username!: string
 }
 </script>

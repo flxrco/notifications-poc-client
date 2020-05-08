@@ -1,7 +1,7 @@
 <template>
   <q-menu>
     <q-list style="min-width: 300px">
-      <q-item v-for="notif in notifications" :key="notif.id" clickable v-ripple @click="onNotificationClick">
+      <q-item v-for="notif in notifications" :key="notif.id" clickable v-ripple @click="onNotificationClick(notif)">
         <q-item-section avatar>
           <q-avatar :icon="notif.type | notifAvatar" text-color="white" color="secondary"></q-avatar>
         </q-item-section>
@@ -29,10 +29,11 @@ import { AxiosInstance } from 'axios'
 import { DateTime } from 'luxon'
 import Notification from '../models/notifications/notification.interface'
 import NotificationType from '../models/notifications/notification-type.enum'
+import MarkAsReadPayload from '../models/vuex/mark-as-read-payload.interface'
 
 @Component({
   methods: {
-    ...mapActions('notification', ['fetchNotifications'])
+    ...mapActions('notification', ['fetchNotifications', 'markAsRead'])
   },
   computed: {
     ...mapState('notification', ['notifications'])
@@ -57,6 +58,7 @@ export default class NotificationMenu extends Vue {
   // from vuex
   notifications!: Notification[]
   fetchNotifications!: (axios: AxiosInstance) => Promise<void>
+  markAsRead!: (pl: MarkAsReadPayload) => Promise<void>
 
   // from filters
   minutesFromNow!: (date: Date) => string;
@@ -66,8 +68,13 @@ export default class NotificationMenu extends Vue {
     this.fetchNotifications(this.$axios)
   }
 
-  onNotificationClick (notif: Notification) {
-    console.log(notif)
+  async onNotificationClick (notification: Notification) {
+    if (notification.readAt) {
+      return
+    }
+
+    await this.markAsRead({ $axios: this.$axios, notification })
+    this.$q.notify(`Notification #${notification.id} has been marked as read.`)
   }
 }
 </script>
