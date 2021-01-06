@@ -15,7 +15,7 @@
     "@quasar/extras": "^1.0.0",
     "@stomp/rx-stomp": "^0.3.5",
     "@stomp/stompjs": "^5.4.4",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "faker": "^4.1.0",
     "lodash": "^4.17.15",
     "luxon": "^1.24.1",
